@@ -1,0 +1,99 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  Commodity {{ commodity.goods_nomenclature_item_id }} - condition dialogs
+{% endblock %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">Commodity {{ commodity.goods_nomenclature_item_id }} - condition dialogs</h1>
+            {% for m in commodity.measures %}
+                {% if m.permuted_measure_conditions | length > 0 %}
+                    <h2 class="govuk-heading-s">Measure SID {{ m.id }} of type {{ m.measure_type_id }}</h2>
+
+                    <div class="panel">
+                        <h2 class="govuk-heading-m">{{ m.measure_type_description }} for {{ m.geographical_area_description }}</h2>
+                        {% for permutation_group in m.permuted_measure_conditions %}
+                            {% if permutation_group.condition_code != "n/a" %}
+                                {# <p>{{ permutation_group.condition_code }}</p> #}
+                                {% if permutation_group.measure_conditions | length == 1 %}
+                                    <p class="govuk-body-s">Meet the following condition and supply the relevant document code on your declaration.</p>
+                                {% else %}
+                                    <p class="govuk-body-s">Meet one of the following conditions and supply the relevant document code(s) on your declaration.</p>
+                                {% endif %}
+                            {% endif %}
+
+                            <table class="govuk-table govuk-table-s">
+                                <thead class="govuk-table__head">
+                                    <tr class="govuk-table__row">
+                                        <th scope="col" class="govuk-table__header">Document code</th>
+                                        <th scope="col" class="govuk-table__header">Requirement</th>
+                                        <th scope="col" class="govuk-table__header">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="govuk-table__body">
+
+                                    {% for measure_conditions in permutation_group.measure_conditions %}
+
+                                        <tr class="govuk-table__row">
+                                            <td class="govuk-table__cell">
+                                                {% set looper = 0 %}
+                                                {% for measure_condition in measure_conditions %}
+                                                    {% set looper = looper + 1 %}
+                                                    {% if looper > 1 %}
+                                                    +
+                                                    {% endif %}
+                                                    {% if measure_condition.condition_class == "threshold" %}
+                                                        Threshold condition
+                                                    {% else %}
+                                                        {{ measure_condition.document_code | safe }}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </td>
+
+                                            <td class="govuk-table__cell">
+                                                {% set looper = 0 %}
+                                                {% if measure_conditions | length == 2 %}
+                                                    {% if measure_conditions[0].condition_class == "document" and measure_conditions[1].condition_class == "document" %}
+                                                        {% set instruct_text = "Provide both documents" %}
+                                                    {% else %}
+                                                        {% set instruct_text = "Meet both conditions" %}
+                                                    {% endif %}
+                                                    <p class="govuk-body-s">{{ instruct_text }}</p>
+                                                {% endif %}
+                                                {% for measure_condition in measure_conditions %}
+                                                    {# {{ measure_condition | dump }} #}
+                                                    {% set looper = looper + 1 %}
+                                                    {% if looper > 1 %}
+                                                        <br><br>and<br><br>
+                                                    {% endif %}
+                                                    {% if measure_condition.document_code | length == 0 %}
+                                                        {{ measure_condition.threshold_text | safe }}{{ measure_condition.requirement | safe }}
+                                                    {% else %}
+                                                        {{ measure_condition.certificate_description | safe }}
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </td>
+
+                                            <td class="govuk-table__cell">
+                                                {{ measure_conditions[0].action | safe }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% endfor %}
+                        {% if m.features_universal_waiver %}
+                            <h3 class="govuk-heading-s govuk-!-margin-bottom-3">Customs Declaration Service (CDS) universal waiver</h3>
+                            <p class="govuk-body-s govuk-!-margin-0">Requirement for a licence is waived by entering the 999L document code and the document identifier CDS WAIVER in the additional documentation field for this commodity item. 999L can be used for CDS in a similar way to LIC99 on the CHIEF system, when a waiver may be applied.</p>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}
