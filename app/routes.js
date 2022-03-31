@@ -5,8 +5,8 @@ const Commodity = require('./classes/commodity.js');
 
 // Add your routes here - above the module.exports line
 
-var prefix = 'http://127.0.0.1:5000/commodities/';
-// var prefix = 'https://comm-code-history.herokuapp.com/commodities/';
+// var prefix = 'http://127.0.0.1:5000/commodities/';
+var prefix = 'https://comm-code-history.herokuapp.com/commodities/';
 
 // Get a commodity
 router.get(['/commodities/:goods_nomenclature_item_id/'], function (req, res) {
