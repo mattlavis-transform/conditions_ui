@@ -14,18 +14,77 @@
                     <h2 class="govuk-heading-s">Measure SID {{ m.id }} of type {{ m.measure_type_id }}</h2>
 
                     <div class="panel">
-                        <h2 class="govuk-heading-m">{{ m.measure_type_description }} for {{ m.geographical_area_description }}</h2>
+                        <h2 class="govuk-heading-m">{{ m.measure_type_overlay | safe }}</h2>
+
+                        {% if m.measure_type_summary != "" %}
+                            <details class="govuk-details" data-module="govuk-details">
+                                <summary class="govuk-details__summary">
+                                    <span class="govuk-details__summary-text">More information about this control</span>
+                                </summary>
+                                <div class="govuk-details__text">{{ m.measure_type_summary | safe }}</div>
+                            </details>
+                        {% endif %}
+
+                        {# {{ m | dump }} #}
                         {% for permutation_group in m.permuted_measure_conditions %}
+                            {% set previous_condition_class = "unspecified" %}
                             {% if permutation_group.condition_code != "n/a" %}
-                                {# <p>{{ permutation_group.condition_code }}</p> #}
+                                <p>{{ permutation_group.condition_code }}</p>
                                 {% if permutation_group.measure_conditions | length == 1 %}
                                     <p class="govuk-body-s">Meet the following condition and supply the relevant document code on your declaration.</p>
                                 {% else %}
                                     <p class="govuk-body-s">Meet one of the following conditions and supply the relevant document code(s) on your declaration.</p>
                                 {% endif %}
-                            {% else %}
-                                <p class="govuk-body-s">Meet one of the following conditions and supply the relevant document code(s) on your declaration.</p>
                             {% endif %}
+
+                            <!-- Start show new document codes //-->
+                            {% for measure_conditions in permutation_group.measure_conditions %}
+                                <!-- SHOW CODE //-->
+                                {% set looper = 0 %}
+                                
+                                    {% for measure_condition in measure_conditions %}
+                                        {% if measure_condition.stw_condition_class_overlay != previous_condition_class %}
+                                            <h2 class="govuk-heading-m">{{ measure_condition.stw_condition_class_overlay }}</h2>
+                                        {% endif %}
+                                        <p class="govuk-body b">
+                                        {% set looper = looper + 1 %}
+                                        {% if looper > 1 %} + {% endif %}
+                                        {% if measure_condition.condition_class == "threshold" %}
+                                            Threshold condition
+                                        {% else %}
+                                            {{ measure_condition.document_code | safe }}
+                                        {% endif %}
+                                        {% set previous_condition_class = measure_condition.stw_condition_class_overlay %}
+                                        </p>
+                                    {% endfor %}
+                                
+                                <!-- END SHOW CODE //-->
+
+                                <!-- Show words //-->
+                                {% set looper = 0 %}
+                                {% if measure_conditions | length == 2 %}
+                                    {% if measure_conditions[0].condition_class == "document" and measure_conditions[1].condition_class == "document" %}
+                                        {% set instruct_text = "Provide both documents" %}
+                                    {% else %}
+                                        {% set instruct_text = "Meet both conditions" %}
+                                    {% endif %}
+                                    <p class="govuk-body-s">{{ instruct_text }}</p>
+                                {% endif %}
+                                {% for measure_condition in measure_conditions %}
+                                    {% set looper = looper + 1 %}
+                                    {% if looper > 1 %}
+                                        <br><br>and<br><br>
+                                    {% endif %}
+                                    {% if measure_condition.document_code | length == 0 %}
+                                        {{ measure_condition.threshold_text | safe }}{{ measure_condition.requirement | safe }}
+                                    {% else %}
+                                        {# {{ measure_condition.certificate_description | safe }} #}
+                                        {{ measure_condition.overlay | safe }}
+                                    {% endif %}
+                                {% endfor %}
+                            {% endfor %}
+
+                            <!-- End show new document codes //-->
 
                             <table class="govuk-table govuk-table-s">
                                 <thead class="govuk-table__head">
@@ -65,7 +124,6 @@
                                                     <p class="govuk-body-s">{{ instruct_text }}</p>
                                                 {% endif %}
                                                 {% for measure_condition in measure_conditions %}
-                                                    {# {{ measure_condition | dump }} #}
                                                     {% set looper = looper + 1 %}
                                                     {% if looper > 1 %}
                                                         <br><br>and<br><br>
@@ -93,7 +151,6 @@
                                     </summary>
                                     <div class="govuk-details__text">
                                         <table class="govuk-table govuk-table-s">
-                                            {# <caption class="govuk-table__caption govuk-table__caption--m">Dates and amounts</caption> #}
                                             <thead class="govuk-table__head">
                                                 <tr class="govuk-table__row">
                                                     <th scope="col" class="govuk-table__header">Document code</th>
@@ -106,13 +163,11 @@
                                                 {% for permutation_group in m.permuted_measure_conditions %}
                                                     {% for measure_conditions in permutation_group.measure_conditions %}
                                                         {% for measure_condition in measure_conditions %}
-                                                            {% if measure_condition.document_code %}
-                                                                <tr class="govuk-table__row">
-                                                                    <td class="govuk-table__cell">{{ measure_condition.document_code }}</td>
-                                                                    <td class="govuk-table__cell">{{ measure_condition.guidance_cds | safe }}</td>
-                                                                    <td class="govuk-table__cell">{{ measure_condition.guidance_chief | safe }}</td>
-                                                                </tr>
-                                                            {% endif %}
+                                                            <tr class="govuk-table__row">
+                                                                <td class="govuk-table__cell">{{ measure_condition.document_code }}</td>
+                                                                <td class="govuk-table__cell">{{ measure_condition.guidance_cds | safe }}</td>
+                                                                <td class="govuk-table__cell">{{ measure_condition.guidance_chief | safe }}</td>
+                                                            </tr>
                                                         {% endfor %}
                                                     {% endfor %}
                                                 {% endfor %}

@@ -6,11 +6,49 @@ div.panel {
     margin                 : 1em 0px;
     padding                : 1em;
     border                 : 1px solid black;
+
+    table {
+       
+
+        td {
+            font-size: 16px;
+
+            ul {
+                padding: 0px;
+                margin : 0px;
+            }
+
+            li {
+                font-size: 16px;
+                padding: 0px;
+                margin : 0px;
+            }
+
+            p {
+                font-size: 16px;
+            }
+        }
+    }
 }
 
 .govuk-table-s {
     font-size: 16px;
 }
+
 .govuk-body-s {
     font-size: 16px;
+}
+
+.govuk-details-s {
+    font-size: 16px;
+}
+
+tr:last-of-type {
+    td {
+        border: 0
+    }
+}
+
+.b {
+    font-weight:bold;
 }

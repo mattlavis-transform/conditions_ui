@@ -9,6 +9,15 @@ class Measure {
         delete this.item;
     }
 
+    process_5a5b() {
+        this.show_5a5b = false;
+        this.measure_conditions.forEach(mc => {
+            if (mc.guidance_cds != null) {
+                this.show_5a5b = true;
+            }
+        });
+    }
+
     get_data() {
         this.id = this.item["id"];
         this.features_universal_waiver = this.item["attributes"]["features_universal_waiver"];

@@ -35,6 +35,7 @@
     "gulp-sass": "^5.0.0",
     "inquirer": "^8.2.0",
     "lodash": "^4.17.21",
+    "markdown-it": "^12.3.2",
     "marked": "^4.0.10",
     "node-sass": "^6.0.1",
     "notifications-node-client": "^5.1.0",
