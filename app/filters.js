@@ -1,3 +1,5 @@
+var MarkdownIt = require('markdown-it');
+
 module.exports = function (env) {
   /**
    * Instantiate object used to store the methods registered as a
@@ -41,5 +43,27 @@ module.exports = function (env) {
   /* ------------------------------------------------------------------
     keep the following line to return your filters to the app
   ------------------------------------------------------------------ */
+  filters.convert_markdown = function (str, hide_bullets) {
+    if (typeof str !== 'undefined') {
+        md = new MarkdownIt();
+        str = str.replace(/\* ([0-9]{1,2})\\. /g, '$1. ');
+        str = str.replace(/  \* \(([a-z]{1,2})\)/g, '\n\n    $1. ');
+
+        var markdown_text = md.render(str);
+        markdown_text = markdown_text.replace(/&lt;/g, "<");
+        markdown_text = markdown_text.replace(/&gt;/g, ">");
+        markdown_text = markdown_text.replace(/<h1>/g, "<h1 class='govuk-heading-l'>");
+        markdown_text = markdown_text.replace(/<h2>/g, "<h2 class='govuk-heading-m'>");
+        markdown_text = markdown_text.replace(/<h3>/g, "<h3 class='govuk-heading-s'>");
+
+        markdown_text = markdown_text.replace(/<ul>/g, "<ul class='govuk-list govuk-list--bullet'>")
+        markdown_text = markdown_text.replace(/<ol>/g, "<ol class='govuk-list govuk-list--number'>")
+        markdown_text = markdown_text.replace(/<a href/g, "<a target='_blank' href")
+        return markdown_text;
+    } else {
+        return "";
+    }
+}
+  
   return filters
 }

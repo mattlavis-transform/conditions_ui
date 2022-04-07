@@ -67,7 +67,7 @@ class MeasureCondition {
             var weights = ["KGM", "TNE"]
             var volumes = ["LTR", "HLT"]
             if (weights.includes(this.condition_measurement_unit_code)) {
-                this.threshold_text = "Your goods must weigh less than or equal to ";
+                this.threshold_text = "The weight of your goods must not exceed ";
             } else if (volumes.includes(this.condition_measurement_unit_code)) {
                 this.threshold_text = "The volume of your goods must not exceed ";
             } else {

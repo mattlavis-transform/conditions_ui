@@ -8,20 +8,20 @@ div.panel {
     border                 : 1px solid black;
 
     table {
-       
+
 
         td {
             font-size: 16px;
 
             ul {
-                padding: 0px;
+                // padding: 0px;
                 margin : 0px;
             }
 
             li {
                 font-size: 16px;
-                padding: 0px;
-                margin : 0px;
+                padding  : 0px;
+                margin   : 0px;
             }
 
             p {
@@ -47,8 +47,12 @@ tr:last-of-type {
     td {
         border: 0
     }
+
+    th {
+        border: 0
+    }
 }
 
 .b {
-    font-weight:bold;
+    font-weight: bold;
 }

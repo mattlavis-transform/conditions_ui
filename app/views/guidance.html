@@ -1,0 +1,53 @@
+{% extends "layout.html" %}
+
+{% block pageTitle %}
+  5a and 5b content checker
+{% endblock %}
+
+{% block content %}
+
+    <div class="govuk-grid-row">
+        <div class="govuk-grid-column-two-thirds">
+            <h1 class="govuk-heading-l">5a and 5b content checker</h1>
+            {# {{ document_codes | dump }} #}
+            {# {% for code, data in document_codes %}
+                <li>{{ code }}: {{ data }}</li>
+            {% endfor %} #}
+
+            {% for code, dc in document_codes %}
+                {% if dc.used != "No" %}
+                    <div class="panel">
+                        <h2 class="govuk-heading-m">Content for document code {{ code }}</h2>
+                        <table class="govuk-table">
+                            <tbody class="govuk-table__body">
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">Trade direction</th>
+                                    <td class="govuk-table__cell">{{ dc.direction }}</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">Used?</th>
+                                    <td class="govuk-table__cell">{{ dc.used }}</td>
+                                </tr>
+                                {# <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">Description</th>
+                                    <td class="govuk-table__cell">{{ dc.description }}</td>
+                                </tr> #}
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">CDS guidance</th>
+                                    <td class="govuk-table__cell">{{ dc.guidance_cds | convert_markdown | safe }}</td>
+                                </tr>
+                                <tr class="govuk-table__row">
+                                    <th scope="row" class="govuk-table__header">CHIEF guidance</th>
+                                    <td class="govuk-table__cell">{{ dc.guidance_chief | convert_markdown | safe }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        {# {{ dc | dump }} #}
+                    </div>
+                {% endif %}
+            {% endfor %}
+
+        </div>
+    </div>
+
+{% endblock %}
