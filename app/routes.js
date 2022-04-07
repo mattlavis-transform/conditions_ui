@@ -6,8 +6,8 @@ const Guidance = require('./classes/guidance.js');
 
 // Add your routes here - above the module.exports line
 
-var prefix = 'http://127.0.0.1:5000';
-// var prefix = 'https://comm-code-history.herokuapp.com';
+// var prefix = 'http://127.0.0.1:5000';
+var prefix = 'https://comm-code-history.herokuapp.com';
 
 // Get a commodity
 router.get(['/commodities/:goods_nomenclature_item_id/'], function (req, res) {
