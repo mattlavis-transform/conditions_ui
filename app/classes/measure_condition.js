@@ -23,11 +23,16 @@ class MeasureCondition {
         this.document_code = this.item["attributes"]["document_code"];
         this.requirement = this.item["attributes"]["requirement"];
         this.monetary_unit_abbreviation = this.item["attributes"]["monetary_unit_abbreviation"];
-        
+        this.applies_to_chief = this.item["attributes"]["applies_to_chief"];
+        if (this.applies_to_chief == false) {
+            this.certificate_description += " <span class='tag'>CDS only</span>";
+        }
+
         // 5a and 5b related
         this.guidance_cds = this.item["attributes"]["guidance_cds"];
         this.guidance_chief = this.item["attributes"]["guidance_chief"];
         this.status_codes_cds = this.item["attributes"]["status_codes_cds"];
+
         if (this.guidance_cds == null) {
             this.guidance_cds = "No information currently available";
         }

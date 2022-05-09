@@ -15,7 +15,7 @@ div.panel {
 
             ul {
                 // padding: 0px;
-                margin : 0px;
+                margin: 0px;
             }
 
             li {
@@ -55,4 +55,17 @@ tr:last-of-type {
 
 .b {
     font-weight: bold;
+}
+
+.tag {
+    text-transform     : uppercase;
+    white-space        : nowrap;
+    // background-color: #666;
+    // color           : #fff;
+    background-color   : #f0f0f0;
+    color              : #000000;
+    border             : 1px solid #ccc;
+    font-size          : 12px;
+    padding            : 2px 4px;
+    border-radius      : 4px;
 }
